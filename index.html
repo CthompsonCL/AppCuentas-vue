@@ -21,67 +21,118 @@
    <div class="container">
         <div id="taskApp">
             <hr>
-                <h3>{{nameApp}}</h3>
+                <h1 class="jumbotron">Vue.Js</h1>
 
-                <form v-on:submit="addTask" class="app-form">
-                    <div class="form-group">
-                        <hr>
-
-                        <input type="text" class="form-control" v-model="tasks.titulo" placeholder="Ingrese nombre de la tarea">
-                    </div>  
-
-                        <button type="submit" v-on:click="addTask" class="btn btn-block btn-success">
-                            <i class="fas fa-plus"></i>&nbsp;Agregar Tarea
-                        </button>
-                        <br>
-                    </form>
-
-                <table class="table">
-                    <thead>
-                        <tr>
+                <div id="app">
+                    <table class="table">
+                        <thead>
+                            <th>&nbsp;</th>
+                            <th>Descripción</th>
+                            <th>Monto</th>
                             <th>Estado</th>
-                            <th>Nombre de Tarea</th>
-                            <th>Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="tarea in tasks">
-                            <td><input type="checkbox" v-model="tarea.done"></td>
-                            <td> <span :class="{taskDone: tarea.done}">
-                                    {{ tarea.titulo }}
-                                  </span></td>
-                            <td> 
-                                            <button v-on:click="deleteTask(tarea)" class="btn btn-block btn-danger">Delete</button>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                        
+                                        <td>&nbsp;</td>
+                                        <td><input type="text" class="form-control" placeholder="Descripción" v-model="newEntry.name"></td>
+                                        <td><input type="text" class="form-control" placeholder="Monto" v-model="newEntry.amount"></td>
+                                        <td><button @click="add()" type="submit" class="btn btn-block btn-success">Agregar</button></td>
+                                      
+                                    </tr>
+
+                                <tr v-if="items.length === 0">
+                                        
+                                        <td colspan="4" class="text-center">No hay registros por mostrar</td>
+                                      
+                                    </tr>
+                            <tr v-for="item,index in items">
+                                <td>
+                                    <button @click='remove(index)' class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.amount.toFixed(2)}}</td>
+                                <td :title="item.paid ? 'Pagado' : 'Sin Pagar'">
+                                    <button class="btn" @click="changePaid(item)" style="width:3em;" :class="{ 'btn-success': item.paid }">
+                                    <i v-if="item.paid" class="fas fa-check"></i>
+                                    <i v-if="!item.paid" class="fas fa-times"></i>
+                                </button></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                                <tr class="text-danger">
+                                        <td></td>
+                                    <td class="text-right">Por Pagar</td>
+                                    <td class="text-left">{{totalAmount(0)}}</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="text-success">
+                                        <td></td>
+                                    <td class="text-right">Pagado</td>
+                                    <td class="text-left">{{totalAmount(1)}}</td>
+                                    <td></td>
+                                </tr>
+                                <tr class="text-info">
+                                        <td></td>
+                                    <td class="text-right">Total</td>
+                                    <td class="text-left">{{totalAmount(2)}}</td>
+                                    <td></td>
+                                </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+               
             </div>
    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
-new Vue({
-    el: '#taskApp',
+var app = new Vue({
+    el: '#app',
     data: {
-        nameApp: 'Prueba Aplicación con Vue.js',
-        tasks: [
-            {
-                titulo: 'lala1',
-                done: true
-            }
+        newEntry: {
+            name: '',
+            amount: 0,
+        },
+        items: [
+            {name: 'Servicios',amount:200,paid:false},
+            {name: 'Cuentas',amount:90,paid:true}
         ]
     },
     methods: {
-        addTask: function(e){
-            e.preventDefault();
-            this.tasks.push({
-                titulo: this.tasks.titulo,
-                done: false
-            })
+        remove: function(index){
+            this.items.splice(index,1);
         },
-        deleteTask: function(task){
-            this.tasks.splice(this.tasks.indexOf(task),1)
+        add: function(){
+            this.items.push({
+                name: this.newEntry.name,
+                amount: parseFloat(this.newEntry.amount),
+                paid: false
+            });
+            this.newEntry.name = '';
+            this.newEntry.amount = 0;
         },
+        changePaid: function(item){
+            item.paid = !(item.paid);
+        },
+        totalAmount: function(t){
+            var total = this.items.reduce(function(a,b){
+               switch(t){
+                   case 0: return a + (!b.paid ? b.amount : 0)
+                   case 1: return a + (b.paid ? b.amount : 0);
+                   case 2: return a + b.amount;
+               }
+            },0);
+            return total.toFixed(2);   
+        }
+
+        // add: function(e){
+        //     this.items.push({
+        //         name: this.name,
+        //         amount: this.amount,
+        //         paid: false
+        //     })
+        // }
     }
 })
 </script>
