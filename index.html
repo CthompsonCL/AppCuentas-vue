@@ -1,97 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="index.css">
-    <title>Aplicacion de Cuentas</title>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>vuelinksapp</title>
+    <!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   </head>
-<body>
-    
-   <div class="container">
-        <div id="taskApp">
-            <hr>
-                <div class="jumbotron">
-                    <table>
-                        <tr style="font-size:2em;">
-                            <td><img src="logo.png" alt="" style="width:1em;"></td>
-                            <td>Aplicación de Cuentas</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td><p style="color:rgba(255, 255, 255, 0.418);">Vue.js - Bootstrap 4 - HTML - CSS</p></td>
-                        </tr>
-                    </table>
-                    
-                    
-    
-                </div>
-                <div id="app">
-                    <table class="table">
-                        <thead>
-                            <th>&nbsp;</th>
-                            <th>Descripción</th>
-                            <th>Monto</th>
-                            <th>Estado</th>
-                        </thead>
-                        <tbody>
-                                <tr>
-                                        
-                                        <td>&nbsp;</td>
-                                        <td><input type="text" class="form-control" placeholder="Descripción" v-model="newEntry.name"></td>
-                                        <td><input type="text" class="form-control" placeholder="Monto" v-model="newEntry.amount"></td>
-                                        <td><button @click="add()" type="submit" class="btn btn-block btn-success">Agregar</button></td>
-                                      
-                                    </tr>
-
-                                <tr v-if="items.length === 0">
-                                        
-                                        <td colspan="4" class="text-center">No hay registros por mostrar</td>
-                                      
-                                    </tr>
-                            <tr v-for="item,index in items">
-                                <td>
-                                    <button @click='remove(index)' class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.amount.toFixed(2)}}</td>
-                                <td :title="item.paid ? 'Pagado' : 'Sin Pagar'">
-                                    <button class="btn" @click="changePaid(item)" style="width:3em;" :class="{ 'btn-success': item.paid }">
-                                    <i v-if="item.paid" class="fas fa-check"></i>
-                                    <i v-if="!item.paid" class="fas fa-times"></i>
-                                </button></td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                                <tr class="text-danger">
-                                        <td></td>
-                                    <td class="text-right">Por Pagar</td>
-                                    <td class="text-left">{{totalAmount(0)}}</td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-success">
-                                        <td></td>
-                                    <td class="text-right">Pagado</td>
-                                    <td class="text-left">{{totalAmount(1)}}</td>
-                                    <td></td>
-                                </tr>
-                                <tr class="text-info">
-                                        <td style="border:none;"></td>
-                                    <td class="text-right" style="border:none;">Total</td>
-                                    <td class="text-left" style="border:none;">{{totalAmount(2)}}</td>
-                                    <td style="border:none;"></td>
-                                </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-               
-            </div>
-   </div>
-   <footer><center style="color:rgba(255, 255, 255, 0.39);">&copy;&nbsp;<a href="https://cthompsoncl.github.io" target="_blank" style="text-decoration:none;color:rgba(255, 255, 255, 0.39);">Christopher Thompson H.</a></center></footer>
-</body>
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="index.js"></script>
+  <body>
+      <style>
+          #urlHref:hover{
+            color:orange;
+          }
+          </style>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
 </html>
