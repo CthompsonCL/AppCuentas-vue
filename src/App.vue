@@ -12,17 +12,15 @@
       <div class="card-body" >
         <form v-on:submit.prevent="addLink" class="form-inline">
           <div class="form-group">
-            <input class="form-control mr-4" v-model='newLink.title' placeholder="Title" type="text">
+            <input class="form-control mr-4" v-model='newLink.name' placeholder="Name" type="text">
           </div>
           
           <div class="form-group">
-              <input class="form-control mr-4" v-model='newLink.author' placeholder="Author" type="text">
+              <input class="form-control mr-4" v-model='newLink.amount' placeholder="Amount" type="text">
             </div>
 
-            <div class="form-group">
-                <input class="form-control mr-4" v-model='newLink.url' placeholder="Url" type="text">
-              </div>
-              <input type="submit" class="btn btn-success" value="Add Link">
+            
+              <input type="submit" class="btn btn-success" value="Add Account">
         </form>
       </div>
     </div>
@@ -32,20 +30,25 @@
   <div class="container">
     <div class="card">
       <div class="card-header">
-        <h3>List of Links</h3>
+        <h3>List of Accounts</h3>
       </div>
       <div class="card-body">
         <table class="table table-striped">
           <thead>
-            <th>Title</th>
-            <th>Author</th>
-            <th></th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
           </thead>
           <tbody>
-            <tr v-for="link in links">
-              <td><a target="_blank" v-bind:href="link.url" id="urlHref">{{ link.title }}</a></td>
-              <td>{{link.author}}</td>
-              <td><button @click="deleteLink(link)" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
+            <tr v-for="item in links">
+              <td>{{ item.name }}</a></td>
+              <td>{{item.amount}}</td>
+              <td><button class="btn" @click="changePaid(item)" :class="{ 'btn btn-sm btn-success': item.status, 'btn-sm btn-danger': !item.status}" >
+                                    <div v-if="item.status"><i class="fas fa-check"></i>&nbsp;Pagado</div>
+                                    <div v-if="!item.status"><i class="fas fa-times"></i>&nbsp;Sin Pagar</div>
+                                </button></td>
+              <td><button @click="deleteLink(item)" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
             </tr>
           </tbody>
         </table>
@@ -82,25 +85,34 @@ export default {
   },
   data() {
     return {
-      newLink: {
-        title: '',
-        author: '',
-        url: ''
-      }
+      _newLink: {
+        name: '',
+        amount: '',
+        status: ''
+      },
+      get newLink() {
+        return this._newLink;
+      },
+      set newLink(value) {
+        this._newLink=value;
+      },
     }
   },
   methods:{
     addLink: function(){
       linksRef.push(this.newLink);
       toastr.success("Link added");
-      this.newLink.title = '';
-      this.newLink.author = '';
-      this.newLink.url = '';
+      this.newLink.name = '';
+      this.newLink.amount = '';
+      this.newLink.state = false;
     },
     deleteLink: function(link){
       linksRef.child(link['.key']).remove();
       toastr.success('Link removed');
-    }
+    },
+    changePaid:function(n){
+      n.status=!n.status
+      }     
   }
 }
 </script>
