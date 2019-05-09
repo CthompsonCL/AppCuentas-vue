@@ -51,6 +51,26 @@
               <td><button @click="deleteLink(item)" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>
             </tr>
           </tbody>
+           <tfoot>
+              <tr class="text-danger">
+                <td></td>
+                <td class="text-right">Por pagar</td>
+                <td>{{ totalAmount(0) }}</td>
+                <td></td>
+              </tr>
+              <tr class="text-success">
+                <td></td>
+                <td class="text-right">Pagado</td>
+                <td>{{ totalAmount(1) }}</td>
+                <td></td>
+              </tr>
+              <tr class="text-info">
+                <td></td>
+                <td class="text-right">Total</td>
+                <td>{{ totalAmount(2) }}</td>
+                <td></td>
+              </tr>
+            </tfoot>
         </table>
       </div>
     </div>
@@ -100,11 +120,16 @@ export default {
   },
   methods:{
     addLink: function(){
-      linksRef.push(this.newLink);
+     linksRef.push({
+            name: this.newLink.name,
+            amount: parseFloat(this.newLink.amount),
+            status: false
+          });
       toastr.success("Link added");
+
       this.newLink.name = '';
       this.newLink.amount = '';
-      this.newLink.state = false;
+      this.newLink.status = false;
     },
     deleteLink: function(link){
       linksRef.child(link['.key']).remove();
@@ -112,7 +137,19 @@ export default {
     },
     changePaid:function(n){
       n.status=!n.status
-      }     
+      }, 
+    totalAmount(t){
+            var total = this.links.reduce(function(a, b) {
+              switch(t) {
+                case 0: return a + (!b.status ? b.amount : 0);
+                case 1: return a + (b.status ? b.amount : 0);
+                case 2: return a + b.amount;
+              }
+            }, 0);
+
+            return total;
+        }
+      
   }
 }
 </script>
